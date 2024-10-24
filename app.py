@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import streamlit as st
-import plotly.express as px
+import matplotlib.pyplot as plt
 import yfinance as yf
 import datetime
 
@@ -59,17 +59,20 @@ if submit:
 
     ts_forecasts = pd.DataFrame(forecasts, index=pd.to_datetime(forecast_days))
 
-    fig = px.line(df_daily, y='Price', title="Chart")
-    fig.update_traces(hovertemplate='Date=%{x}<br>Value=%{y}', line_color="#0077b6")
-    fig.add_scatter(x=ts_forecasts.index, y=forecasts, mode='lines', name='Predicted', line=dict(dash='dash', color='red'))
+    fig1, ax1 = plt.subplots(figsize=(14, 7))
+    ax1.set_title('Actual + Forecast')
+    ax1.plot(df_daily, label='Actual')
+    ax1.plot(ts_forecasts, 'r--', label='Predicted')
+    ax1.legend(loc='best')
+    st.pyplot(fig1)
 
-    fig.update_layout(
-            title_x=0.5,
-            legend=dict(orientation='v', x=0.1, xanchor='center'),
-            plot_bgcolor='#111',  # Plot area background
-            # paper_bgcolor='rgba(255, 255, 255, 0.9)',  # Overall background
-        )
-    st.plotly_chart(fig)
+    fig2, ax2 = plt.subplots(figsize=(14, 7))
+    ax2.set_title('Actual + Forecast (Recent)')
+    start = str(datetime.date.today() - datetime.timedelta(days=30))
+    ax2.plot(df_daily.loc[start:], label='Actual')
+    ax2.plot(ts_forecasts, 'r--', label='Predicted')
+    ax2.legend(loc='best')
+    st.pyplot(fig2)
 
     st.write('for the day:', ts_forecasts.iloc[-1].name.date())
     st.write("values is:", ts_forecasts.iloc[-1, 0])
