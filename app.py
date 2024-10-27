@@ -17,7 +17,23 @@ st.markdown('''
     ##### Generate predictions for upcoming prices based on historical data.
 ''')
 
-options_list = ['AAPL', 'GC=F']
+options_list = ['S&P 500','Dow 30', 'NASDAQ',
+                'Russell 2000', 'Crude Oil',
+                'NVIDIA', 'Tesla', 'Amazon',
+                 'Apple', 'Gold']
+              
+option_asset = {
+    'S&P 500': '^GSPC',
+    'Dow 30': '^DJI',
+    'NASDAQ': '^IXIC',
+    'Russell 2000':'^RUT',
+    'Crude Oil':'CL=F',
+    'NVIDIA': 'NVDA',
+    'Tesla':'TSLA',
+    'Amazon':'AMZN',
+    'Apple': 'AAPL',
+    'Gold': 'GC=F',
+}
 forecast_options = ["Week", "Month"]
 
 forecast_options_dict = {
@@ -31,8 +47,10 @@ option = st.sidebar.selectbox("Select an asset for prediction", options_list)
 date_option = st.sidebar.selectbox("Forecast period", forecast_options)
 submit = st.sidebar.button("Generate Forecast")
 
+asset = option_asset[option]
+
 if submit:
-    data = yf.download(option, start="2020-01-01", end=str(datetime.date.today()))
+    data = yf.download(asset, start="2020-01-01", end=str(datetime.date.today()))
 
     df = data[['Close']].copy()
     df.rename(columns={'Close': 'Price'}, inplace=True)
