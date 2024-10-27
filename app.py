@@ -8,12 +8,12 @@ import datetime
 pd.set_option('display.max_columns', None)
 
 st.set_page_config(
-    page_title="Stocks and Forex Forecasts"
+    page_title="SFPF"
 )
 
 st.markdown('''
-    ## Stocks and Forex Forecasts
-    ##### This app will forecast the price to a specific date
+    ## Stock and Forex Price Forecasting
+    ##### Generate predictions for upcoming prices based on historical data.
 ''')
 
 options_list = ['AAPL', 'GC=F']
@@ -26,9 +26,9 @@ forecast_options_dict = {
 
 st.sidebar.title("Data")
 
-option = st.sidebar.selectbox("What do you want to forecast", options_list)
-date_option = st.sidebar.selectbox("Predict the next?", forecast_options)
-submit = st.sidebar.button("Predict")
+option = st.sidebar.selectbox("Select an asset for prediction", options_list)
+date_option = st.sidebar.selectbox("Forecast period", forecast_options)
+submit = st.sidebar.button("Generate Forecast")
 
 if submit:
     data = yf.download(option, start="2020-01-01", end=str(datetime.date.today()))
@@ -60,19 +60,19 @@ if submit:
     ts_forecasts = pd.DataFrame(forecasts, index=pd.to_datetime(forecast_days))
 
     fig1, ax1 = plt.subplots(figsize=(14, 7))
-    ax1.set_title('Actual + Forecast')
+    ax1.set_title('Price Trend with Forecast')
     ax1.plot(df_daily, label='Actual')
     ax1.plot(ts_forecasts, 'r--', label='Predicted')
     ax1.legend(loc='best')
     st.pyplot(fig1)
 
     fig2, ax2 = plt.subplots(figsize=(14, 7))
-    ax2.set_title('Actual + Forecast (Recent)')
+    ax2.set_title('Recent Price Data and Forecast')
     start = str(datetime.date.today() - datetime.timedelta(days=30))
     ax2.plot(df_daily.loc[start:], label='Actual')
     ax2.plot(ts_forecasts, 'r--', label='Predicted')
     ax2.legend(loc='best')
     st.pyplot(fig2)
 
-    st.write('for the day:', ts_forecasts.iloc[-1].name.date())
-    st.write("values is:", ts_forecasts.iloc[-1, 0])
+    st.write('Prediction date:', ts_forecasts.iloc[-1].name.date())
+    st.write("Forecasted price:", ts_forecasts.iloc[-1, 0])
