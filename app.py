@@ -56,7 +56,7 @@ if submit:
 
     forecasts = []
     for i, day in enumerate(forecast_days):
-        last_rolling_avg = df_rolling['Rolling_Avg'].iloc[-1]
+        last_rolling_avg = df_rolling['Rolling_Avg'].iloc[-1, 0]
         forecasts.append(last_rolling_avg)
 
         df_rolling.loc[day] = last_rolling_avg
