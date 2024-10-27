@@ -34,8 +34,6 @@ submit = st.sidebar.button("Generate Forecast")
 if submit:
     data = yf.download(option, start="2020-01-01", end=str(datetime.date.today()))
 
-    st.write(data.tail())
-
     df = data[['Close']].copy()
     df.rename(columns={'Close': 'Price'}, inplace=True)
 
@@ -52,8 +50,6 @@ if submit:
     df_rolling = df_daily.rolling(window_size).mean().round(1)
     df_rolling.rename(columns={'Price': 'Rolling_Avg'}, inplace=True)
 
-    st.write(df_rolling.tail())
-
     forecasts = []
     for i, day in enumerate(forecast_days):
         last_rolling_avg = df_rolling['Rolling_Avg'].iloc[-1, 0]
@@ -62,11 +58,7 @@ if submit:
         df_rolling.loc[day] = last_rolling_avg
         df_rolling['Rolling_Avg'] = df_rolling['Rolling_Avg'].rolling(window_size).mean().round(1)
 
-    st.write(forecasts)
-
     ts_forecasts = pd.DataFrame(forecasts, index=pd.to_datetime(forecast_days))
-
-    st.write(ts_forecasts.head())
 
     fig1, ax1 = plt.subplots(figsize=(14, 7))
     ax1.set_title('Price Trend with Forecast')
