@@ -73,7 +73,7 @@ if submit:
     ax2.plot(df_daily.loc[start:], label='Actual')
     ax2.plot(ts_forecasts, 'r--', label='Predicted')
     ax2.legend(loc='best')
-    ax2.xticks(rotation=45)
+    plt.xticks(rotation=45)
     st.pyplot(fig2)
 
     st.write('Prediction date:', ts_forecasts.iloc[-1].name.date())
