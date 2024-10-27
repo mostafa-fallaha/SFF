@@ -34,6 +34,8 @@ submit = st.sidebar.button("Generate Forecast")
 if submit:
     data = yf.download(option, start="2020-01-01", end=str(datetime.date.today()))
 
+    st.write(data.head())
+
     df = data[['Close']].copy()
     df.rename(columns={'Close': 'Price'}, inplace=True)
 
