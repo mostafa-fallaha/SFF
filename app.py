@@ -8,7 +8,8 @@ import datetime
 pd.set_option('display.max_columns', None)
 
 st.set_page_config(
-    page_title="SFPF"
+    page_title="SFPF",
+    page_icon="readme/candles.jpg"
 )
 
 st.markdown('''
